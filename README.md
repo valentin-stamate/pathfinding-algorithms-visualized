@@ -2,7 +2,7 @@
 
 
 <p align="center">
-  <img width="500" src="https://i.postimg.cc/CxRSLqrc/Capture5.png">
+  <img width="500" src="https://i.postimg.cc/RFG3VL3W/Capture33.png">
 </p>
 
 ## About  
@@ -12,9 +12,9 @@ Now you can draw the walls to see better how this algorithm works.
 
 ## What's new
 
-* UI
-* The walls can be drawn
-* Beautifull Code?
+* Colors
+* StartNode and EndNode can be moved
+* Pause & Reset buttons
 
 ## Credits
 

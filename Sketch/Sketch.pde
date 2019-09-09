@@ -6,11 +6,13 @@ int scale, rows, cols;
 List< List< Cell > > array;
 List< Cell > openList, closedList, path;
 Cell startNode, endNode, q;
-boolean MousePress, searchDone, searchStarted, mouseDraw;
+boolean MousePress, searchDone, searchStarted;
+boolean startNodeMove, endNodeMode, intro;
 
-ControlP5 startButton, pauseButton;
+ControlP5 startButton, pauseButton, resetButton;
 
 // TODO colors
+color startColor, endColor, openListColor, closedListColor, pathColor;
 
 void setup(){
   size(601, 601);
@@ -26,6 +28,9 @@ void draw(){
 
   if( searchStarted && !searchDone )
     AStar();
+
+  startNode.cellColor( startColor );
+  endNode.cellColor( endColor );
 }
 // INITIALIZE ALL
 void initialize(){
@@ -49,16 +54,18 @@ void initialize(){
     }
   }
 
-  mouseDraw = true;
+  startNodeMove = false;
+  endNodeMode = false;
+  intro = true;
 
-  startNode = array.get( 0 ).get( 0 );
-  endNode = array.get( rows - 1 ).get( cols - 1 );
-  endNode.isBlocked = false;
-  startNode.isBlocked = false;
-  startNode.f = 0;
-  startNode.g = 0;
+  startNode = array.get(0).get(0);
+  endNode = array.get(rows - 1).get(cols - 1);
 
-  openList.add( startNode );
+  startColor = color(0, 105, 92);
+  endColor = color(198, 40, 40);
+  openListColor = color(63, 81, 181);
+  closedListColor = color(110, 50, 70);
+  pathColor = color(0, 121, 107);
 
   startButton = new ControlP5(this);
   startButton.addButton("Start")
@@ -68,6 +75,11 @@ void initialize(){
   pauseButton = new ControlP5(this);
   pauseButton.addButton("Pause")
     .setPosition(80, height - 30)
+    .setSize(60, 20)
+  ;
+  resetButton = new ControlP5(this);
+  resetButton.addButton("Reset")
+    .setPosition(150, height - 30)
     .setSize(60, 20)
   ;
 }
@@ -98,8 +110,15 @@ void AStar(){
           searchDone = true;
           break;
         }
+        float dist;
+        // IF i OR j IS EQUAL WITH q.i OR q.j THE SUCCESSOR IS NOT A CORNER
+        // AND THE DISTANCE IS 1
+        if(s.i == q.i || s.j == q.j)
+          dist = 1;
+        else
+          dist = 1.4; // sqrt(2);
 
-        gNew = q.g + 1;
+        gNew = q.g + dist;
         hNew = heuristic(s, endNode);
         fNew = gNew + hNew;
 
@@ -118,19 +137,15 @@ void AStar(){
     closedList.add(q);
 
     } else if( !searchDone ) {
-      println( "Done!" );
+      println("Not found");
       searchDone = true;
     }
 
+    for(Cell c : closedList)
+      c.cellColor( closedListColor );
 
-    endNode.cellColor( color(234, 2, 43) );
-
-    if( !searchDone ){
-      for(Cell c : closedList)
-       c.cellColor( color(110, 50, 70) );
-      for(Cell c : openList)
-        c.cellColor( color(249, 85, 85) );
-    }
+    for(Cell c : openList)
+      c.cellColor( openListColor );
 
     path.clear();
 
@@ -143,7 +158,7 @@ void AStar(){
     }
 
     for(Cell c : path)
-      c.cellColor( color(43, 239, 127) );
+      c.cellColor( pathColor );
 }
 // GET ALL POSSIBLE SUCCESSORS
 List< Cell > getSuccessors(Cell cell){
@@ -183,24 +198,47 @@ float heuristic(Cell a, Cell b){
 // DRAW THE BOTTOM BAR
 void drawDownNav(){
   noStroke();
-  fill( color(38, 50, 56) );
+  fill( color(30) );
   rect(0, height - 40, width, 40 );
 }
 // MOUSE METHODS
 void mousePressed(){
-  if(mouseDraw)
+  if(!searchStarted){
     MousePress = true;
+  }
 }
 void mouseReleased(){
   MousePress = false;
+  startNodeMove = false;
+  endNodeMode = false;
 }
 // BUTTONS
 void Start(){
-  print("Searching");
   searchStarted = true;
-  mouseDraw = false;
+  openList.add( startNode );
+  intro = false;
 }
 void Pause(){
-  print("Search Pause");
   searchStarted = false;
+}
+void Reset(){
+  searchStarted = false;
+  searchDone = false;
+  intro = true;
+
+  MousePress = false;
+  searchDone = false;
+
+  for(int i = 0; i < rows; i ++){
+    for(int j = 0; j < cols; j ++){
+      array.get(i).get(j).resetCell();
+    }
+  }
+
+  path.clear();
+  openList.clear();
+  closedList.clear();
+
+  startNodeMove = false;
+  endNodeMode = false;
 }
