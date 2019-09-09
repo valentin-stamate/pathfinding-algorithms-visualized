@@ -7,12 +7,12 @@ List< List< Cell > > array;
 List< Cell > openList, closedList, path;
 Cell startNode, endNode, q;
 boolean MousePress, searchDone, searchStarted;
-boolean startNodeMove, endNodeMode, intro;
+boolean startNodeMove, endNodeMode, intro, undoWall;
 
 ControlP5 startButton, pauseButton, resetButton;
 
 // TODO colors
-color startColor, endColor, openListColor, closedListColor, pathColor;
+color startColor, endColor, openListColor, closedListColor, pathColor, bgColor;
 
 void setup(){
   size(1040, 600);
@@ -26,11 +26,14 @@ void draw(){
   background(255);
   drawDownNav();
 
-  if( searchStarted && !searchDone )
-    AStar();
+  if( searchStarted ){
+    if(!searchDone)
+      while( true && !searchDone )
+        AStar();
+  }
 
-  startNode.cellColor( startColor );
-  endNode.cellColor( endColor );
+  startNode.cellColor(startColor);
+  endNode.cellColor(endColor);
 }
 // INITIALIZE ALL
 void initialize(){
@@ -66,6 +69,7 @@ void initialize(){
   openListColor = color(63, 81, 181);
   closedListColor = color(110, 50, 70);
   pathColor = color(0, 121, 107);
+  bgColor = color(255);
 
   startButton = new ControlP5(this);
   startButton.addButton("Start")
@@ -195,20 +199,47 @@ float heuristic(Cell a, Cell b){
   return dist( a.j, a.i, b.j, b.i );
 }
 
+void resetAStar(){
+  for(Cell c : closedList){
+    if(!c.isBlocked)
+      c.resetCell();
+  }
+  for(Cell c : openList){
+    if(!c.isBlocked && c != startNode)
+      c.resetCell();
+  }
+  for(Cell c : path){
+    if(!c.isBlocked && c != startNode) // CHANGE
+      c.resetCell();
+  }
+
+  startNode.resetValues();
+  endNode.resetValues();
+
+  openList.clear();
+  closedList.clear();
+  path.clear();
+
+  openList.add(startNode);
+}
 // DRAW THE BOTTOM BAR
 void drawDownNav(){
   noStroke();
-  fill( color(30) );
+  fill( color(15) );
   rect(0, height - 40, width, 40 );
 }
 // MOUSE METHODS
 void mousePressed(){
-  if(!searchStarted){
-    MousePress = true;
+  if(intro || searchDone){
+    if(mouseButton == LEFT)
+      MousePress = true;
+    else if(mouseButton == RIGHT)
+      undoWall = true;
   }
 }
 void mouseReleased(){
   MousePress = false;
+  undoWall = false;
   startNodeMove = false;
   endNodeMode = false;
 }
@@ -230,15 +261,16 @@ void Reset(){
   searchDone = false;
 
   for(int i = 0; i < rows; i ++){
-    for(int j = 0; j < cols; j ++){
-      array.get(i).get(j).resetCell();
+    for(Cell c : array.get(i)){
+      if(c != startNode && c != endNode)
+        c.resetCell();
     }
   }
+
+  startNode.resetValues();
+  endNode.resetValues();
 
   path.clear();
   openList.clear();
   closedList.clear();
-
-  startNodeMove = false;
-  endNodeMode = false;
 }
