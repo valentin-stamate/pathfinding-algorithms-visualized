@@ -15,7 +15,7 @@ ControlP5 startButton, pauseButton, resetButton;
 color startColor, endColor, openListColor, closedListColor, pathColor;
 
 void setup(){
-  size(601, 601);
+  size(1040, 600);
   frameRate(60);
   background(255);
 
@@ -58,8 +58,8 @@ void initialize(){
   endNodeMode = false;
   intro = true;
 
-  startNode = array.get(0).get(0);
-  endNode = array.get(rows - 1).get(cols - 1);
+  startNode = array.get(rows / 2).get(5);
+  endNode = array.get(rows / 2).get(cols - 1 - 5);
 
   startColor = color(0, 105, 92);
   endColor = color(198, 40, 40);

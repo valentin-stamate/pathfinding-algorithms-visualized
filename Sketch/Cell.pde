@@ -25,7 +25,7 @@ public class Cell{
     if( !this.isBlocked ){
       this.cellColor = col;
       if(col == openListColor && !this.animate){
-        this.radius = 15;
+        this.radius = 20;
         this.animate = true;
       }
     }
@@ -46,7 +46,7 @@ public class Cell{
     if(this.radius > 0 && !this.animate){
       this.radius--;
     }
-    if(frameCount % 3 == 1 && this.radius > 0 && this.animate){
+    if(frameCount % 6 == 1 && this.radius > 0 && this.animate){
       this.radius--;
     }
     if( MousePress && !this.isBlocked && this.isOverCell() && intro){
@@ -78,7 +78,7 @@ public class Cell{
     // DRAWING A CELL
     noStroke();
     fill(this.cellColor);
-    rect(this.j * scale + 1, this.i * scale + 1, scale - 1, scale - 1, this.radius);
+    rect(this.j * scale + 2, this.i * scale + 2, scale - 2, scale - 2, this.radius);
   }
   // IF THE MOUSE IS CLICKED AND OVER THE CELL RETURN TRUE
   private boolean isOverCell() {

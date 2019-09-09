@@ -10,12 +10,6 @@
 This is the visualized version of the A* algorithm.  
 Now you can draw the walls to see better how this algorithm works.
 
-## What's new
-
-* Colors
-* StartNode and EndNode can be moved
-* Pause & Reset buttons
-
 ## Credits
 
 * [TheCodingTrain](https://www.youtube.com/user/shiffman)
