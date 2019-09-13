@@ -11,6 +11,9 @@ This include :
 * `A*`
 * `Dijkstra` (modified version because here is not a cost graph)
 
+Soon :
+* `Prim`
+
 ## How To Run
 
 In order to run this, you'll need to install [Processing](https://processing.org/) first. Open Sketch.pde under Sketch folder and you are done.
