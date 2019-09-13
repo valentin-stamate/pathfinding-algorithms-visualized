@@ -1,14 +1,19 @@
-# <p align="center">A* Vizualized</p>
+# Pathfiding Algorithms Visualized
 
-
-<p align="center">
-  <img width="500" src="https://i.postimg.cc/RFG3VL3W/Capture33.png">
-</p>
+<img width="400" src="https://i.postimg.cc/RFG3VL3W/Capture33.png">
 
 ## About  
 
-This is the visualized version of the A* algorithm.  
-Now you can draw the walls to see better how this algorithm works.
+Here you can see in realtime how pathfiding algorithms works. You can also draw walls and move the start and end point.
+
+This include :
+
+* `A*`
+* `Dijkstra` (modified version because here is not a cost graph)
+
+## How To Run
+
+In order to run this, you'll need to install [Processing](https://processing.org/) first. Open Sketch.pde under Sketch folder and you are done.
 
 ## Credits
 

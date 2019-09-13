@@ -6,6 +6,9 @@ public class Cell{
   public float f = Float.MAX_VALUE, g, h;
   public Cell parent;
 
+  // TODO make it normal
+  public boolean visited = false;
+
   // CELL CONSTRUCTOR
   Cell(int i, int j){
     this.i = i;
@@ -52,7 +55,7 @@ public class Cell{
     if( this.isOverCell() ){
       if(MousePress && !this.isBlocked && (intro || searchDone)){
         if(endNodeMode){
-          if(endNode != this){
+          if(endNode != this && this != startNode){
             endNode.cellColor(bgColor);
             endNode = this;
 
@@ -61,7 +64,7 @@ public class Cell{
           }
 
         } else if(startNodeMove){
-          if(startNode != this){
+          if(startNode != this && this != endNode){
             startNode.cellColor(bgColor);
             startNode = this;
 

@@ -7,9 +7,9 @@ List< List< Cell > > array;
 List< Cell > openList, closedList, path;
 Cell startNode, endNode, q;
 boolean MousePress, searchDone, searchStarted;
-boolean startNodeMove, endNodeMode, intro, undoWall;
+boolean startNodeMove, endNodeMode, intro, undoWall, first, explicitMode;
 
-ControlP5 startButton, pauseButton, resetButton;
+ControlP5 startButton, pauseButton, resetButton, aStarButton, dikstraButton;
 
 // TODO colors
 color startColor, endColor, openListColor, closedListColor, pathColor, bgColor;
@@ -26,15 +26,33 @@ void draw(){
   background(255);
   drawDownNav();
 
+
   if( searchStarted ){
-    if(!searchDone)
-      while( true && !searchDone )
-        AStar();
+    if(first){
+      if(!searchDone){
+        if(explicitMode){
+          AStar();
+        }
+        else {
+          while( !searchDone ){
+            AStar();
+          }
+        }
+      }
+    } else {
+      if(!searchDone){
+        Dijkstra();
+      }
+    }
   }
+
 
   startNode.cellColor(startColor);
   endNode.cellColor(endColor);
 }
+
+
+
 // INITIALIZE ALL
 void initialize(){
   scale = 20;
@@ -86,9 +104,21 @@ void initialize(){
     .setPosition(150, height - 30)
     .setSize(60, 20)
   ;
+  aStarButton = new ControlP5(this);
+  aStarButton.addButton("astar")
+    .setPosition(240, height - 30)
+    .setSize(60, 20)
+  ;
+  resetButton = new ControlP5(this);
+  resetButton.addButton("dijkstra")
+    .setPosition(310, height - 30)
+    .setSize(60, 20)
+  ;
+  first = true; // ASTAR -> true, DJIKSTRA -> false
+  explicitMode = true;// the first time the algorithm is running step by step
 }
 
-// A* ALGORITHM
+// ------====== A* ALGORITHM ======------
 void AStar(){
   if( !openList.isEmpty() ){
 
@@ -110,8 +140,9 @@ void AStar(){
 
         if(s == endNode ){
           s.parent = q;
-          print("Done!");
+          // print("Done!");
           searchDone = true;
+          explicitMode = false;
           break;
         }
         float dist;
@@ -142,6 +173,7 @@ void AStar(){
 
     } else if( !searchDone ) {
       println("Not found");
+      explicitMode = false;
       searchDone = true;
     }
 
@@ -199,6 +231,39 @@ float heuristic(Cell a, Cell b){
   return dist( a.j, a.i, b.j, b.i );
 }
 
+// ------====== DIJKSTRA ALGORITHM ======------
+void Dijkstra(){
+
+  Cell temp;
+
+  if( !openList.isEmpty() ){
+
+    temp = openList.get(0);
+
+    List<Cell> neighbors = getSuccessors(temp);
+
+    for(Cell c : neighbors){
+      if(!c.isBlocked && !c.visited){
+
+        if(c == endNode){
+          print("Found");
+          searchDone = true;
+          return;
+        }
+
+        openList.add(c);
+        c.visited = true;
+        c.cellColor( color(openListColor) );
+      }
+    }
+
+    openList.remove(0);
+
+  }
+
+}
+
+
 void resetAStar(){
   for(Cell c : closedList){
     if(!c.isBlocked)
@@ -253,6 +318,7 @@ void Pause(){
   searchStarted = false;
 }
 void Reset(){
+  explicitMode = true;
   searchStarted = false;
   searchDone = false;
   intro = true;
@@ -273,4 +339,12 @@ void Reset(){
   path.clear();
   openList.clear();
   closedList.clear();
+}
+void astar(){
+  first = true;
+}
+void dijkstra(){
+  openList.clear();
+  openList.add(startNode);
+  first = false;
 }
