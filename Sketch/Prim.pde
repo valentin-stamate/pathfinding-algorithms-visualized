@@ -1,6 +1,6 @@
 class Prim extends Pathfiding{
 
-  Prim(List<List<Cell>> arr){
+  Prim(List<List<Node>> arr){
     super(arr);
   }
 

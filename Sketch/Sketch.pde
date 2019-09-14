@@ -3,17 +3,18 @@ import java.util.ArrayList;
 import controlP5.*;
 
 int scale, rows, cols;
-List< List< Cell > > array;
-List< Cell > openList, closedList, path;
-Cell startNode, endNode, q;
+
+List<List<Node>> array;
+Node startNode, endNode;
 boolean MousePress, searchDone, searchStarted;
-boolean startNodeMove, endNodeMode, intro, undoWall, first, explicitMode;
+boolean startNodeMove, endNodeMode, intro, undoWall, explicitMode;
 
 ControlP5 startButton, pauseButton, resetButton, aStarButton, dikstraButton;
-
-// TODO colors
 color startColor, endColor, openListColor, closedListColor, pathColor, bgColor;
 
+Dijkstra dijkstra;
+
+// SETUP()
 void setup(){
   size(1040, 600);
   frameRate(60);
@@ -21,34 +22,13 @@ void setup(){
 
   initialize();
 }
-// DRAW CELLS ON SCREEN
+// DRAW()
 void draw(){
   background(255);
   drawDownNav();
 
-
-  if( searchStarted ){
-    if(first){
-      if(!searchDone){
-        if(explicitMode){
-          AStar();
-        }
-        else {
-          while( !searchDone ){
-            AStar();
-          }
-        }
-      }
-    } else {
-      if(!searchDone){
-        Dijkstra();
-      }
-    }
-  }
-
-
-  startNode.cellColor(startColor);
-  endNode.cellColor(endColor);
+  startNode.nodeColor(startColor);
+  endNode.nodeColor(endColor);
 }
 
 
@@ -60,20 +40,17 @@ void initialize(){
   MousePress = false;
   searchDone = false;
 
-  array = new ArrayList< List< Cell > >();
-  openList = new ArrayList< Cell >();
-  closedList = new ArrayList< Cell >();
-  path = new ArrayList< Cell >();
-
   rows = (height - 40) / scale;
   cols = width / scale;
 
+  array = new ArrayList<List<Node>>();
   for(int i = 0; i < rows; i ++){
-    array.add( new ArrayList<Cell>()  );
+    array.add( new ArrayList<Node>()  );
     for(int j = 0; j < cols; j ++){
-      array.get( i ).add( new Cell(i, j) );
+      array.get( i ).add( new Node(i, j) );
     }
   }
+  dijkstra = new Dijkstra(array);
 
   startNodeMove = false;
   endNodeMode = false;
@@ -114,185 +91,19 @@ void initialize(){
     .setPosition(310, height - 30)
     .setSize(60, 20)
   ;
-  first = true; // ASTAR -> true, DJIKSTRA -> false
+
   explicitMode = true;// the first time the algorithm is running step by step
 }
 
-// ------====== A* ALGORITHM ======------
-void AStar(){
-  if( !openList.isEmpty() ){
 
-    q = openList.get(0);
-    for(Cell c : openList){
-      if( c.f < q.f ){
-       q = c;
-      }
-    }
-
-    openList.remove( q );
-
-    List< Cell> successors = getSuccessors( q );
-
-    float gNew, hNew, fNew;
-    for(Cell s : successors){
-
-      if( !closedList.contains( s ) && !s.isBlocked){
-
-        if(s == endNode ){
-          s.parent = q;
-          // print("Done!");
-          searchDone = true;
-          explicitMode = false;
-          break;
-        }
-        float dist;
-        // IF i OR j IS EQUAL WITH q.i OR q.j THE SUCCESSOR IS NOT A CORNER
-        // AND THE DISTANCE IS 1
-        if(s.i == q.i || s.j == q.j)
-          dist = 1;
-        else
-          dist = 1.4; // sqrt(2);
-
-        gNew = q.g + dist;
-        hNew = heuristic(s, endNode);
-        fNew = gNew + hNew;
-
-        if( s.f == Float.MAX_VALUE || s.f > fNew ){
-          openList.add( s );
-
-          s.f = fNew;
-          s.g = gNew;
-          s.h = hNew;
-
-          s.parent = q;
-        }
-      }
-    }
-
-    closedList.add(q);
-
-    } else if( !searchDone ) {
-      println("Not found");
-      explicitMode = false;
-      searchDone = true;
-    }
-
-    for(Cell c : closedList)
-      c.cellColor( closedListColor );
-
-    for(Cell c : openList)
-      c.cellColor( openListColor );
-
-    path.clear();
-
-    Cell temp = q;
-    path.add(temp);
-    // GET THE PATH AND cellColor IT
-    while( temp.parent != null ){
-      path.add( temp.parent );
-      temp = temp.parent;
-    }
-
-    for(Cell c : path)
-      c.cellColor( pathColor );
-}
-// GET ALL POSSIBLE SUCCESSORS
-List< Cell > getSuccessors(Cell cell){
-  List< Cell > s = new ArrayList< Cell >();
-  try {
-    s.add( array.get( cell.i - 1 ).get( cell.j - 1 ) );
-  } catch (Exception e){}
-  try {
-    s.add( array.get( cell.i - 1 ).get( cell.j ) );
-  } catch (Exception e){}
-  try {
-    s.add( array.get( cell.i - 1 ).get( cell.j + 1 ) );
-  } catch (Exception e){}
-  try {
-    s.add( array.get( cell.i ).get( cell.j - 1 ) );
-  } catch (Exception e){}
-  try {
-    s.add( array.get( cell.i ).get( cell.j + 1 ) );
-  } catch (Exception e){}
-  try {
-    s.add( array.get( cell.i + 1 ).get( cell.j - 1 ) );
-  } catch (Exception e){}
-  try {
-    s.add( array.get( cell.i + 1 ).get( cell.j ) );
-  } catch (Exception e){}
-  try {
-    s.add( array.get( cell.i + 1 ).get( cell.j + 1 ) );
-  } catch (Exception e){}
-
-  return s;
-}
-// HEURISTIC DISTANCE
-float heuristic(Cell a, Cell b){
-  return dist( a.j, a.i, b.j, b.i );
-}
-
-// ------====== DIJKSTRA ALGORITHM ======------
-void Dijkstra(){
-
-  Cell temp;
-
-  if( !openList.isEmpty() ){
-
-    temp = openList.get(0);
-
-    List<Cell> neighbors = getSuccessors(temp);
-
-    for(Cell c : neighbors){
-      if(!c.isBlocked && !c.visited){
-
-        if(c == endNode){
-          print("Found");
-          searchDone = true;
-          return;
-        }
-
-        openList.add(c);
-        c.visited = true;
-        c.cellColor( color(openListColor) );
-      }
-    }
-
-    openList.remove(0);
-
-  }
-
-}
-
-
-void resetAStar(){
-  for(Cell c : closedList){
-    if(!c.isBlocked)
-      c.resetCell();
-  }
-  for(Cell c : openList){
-    if(!c.isBlocked && c != startNode)
-      c.resetCell();
-  }
-  for(Cell c : path){
-    if(!c.isBlocked && c != startNode) // CHANGE
-      c.resetCell();
-  }
-
-  startNode.resetValues();
-  endNode.resetValues();
-
-  openList.clear();
-  closedList.clear();
-  path.clear();
-
-  openList.add(startNode);
-}
 // DRAW THE BOTTOM BAR
 void drawDownNav(){
   noStroke();
   fill( color(15) );
   rect(0, height - 40, width, 40 );
 }
+
+
 // MOUSE METHODS
 void mousePressed(){
   if(intro || searchDone){
@@ -308,10 +119,11 @@ void mouseReleased(){
   startNodeMove = false;
   endNodeMode = false;
 }
+
+
 // BUTTONS
 void Start(){
   searchStarted = true;
-  openList.add( startNode );
   intro = false;
 }
 void Pause(){
@@ -326,25 +138,10 @@ void Reset(){
   MousePress = false;
   searchDone = false;
 
-  for(int i = 0; i < rows; i ++){
-    for(Cell c : array.get(i)){
-      if(c != startNode && c != endNode)
-        c.resetCell();
-    }
-  }
-
-  startNode.resetValues();
-  endNode.resetValues();
-
-  path.clear();
-  openList.clear();
-  closedList.clear();
 }
 void astar(){
-  first = true;
+
 }
 void dijkstra(){
-  openList.clear();
-  openList.add(startNode);
-  first = false;
+  dijkstra.start();
 }
