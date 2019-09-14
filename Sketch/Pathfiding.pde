@@ -12,6 +12,10 @@ class Pathfiding implements Runnable{
     // look into the subclass
   }
 
+  public boolean canStart(){
+    return t == null ? true : false;
+  }
+
   // GET ALL POSSIBLE SUCCESSORS
   private List<Node> getSuccessors(Node node){
     List<Node> s = new ArrayList<Node>();
@@ -66,6 +70,20 @@ class Pathfiding implements Runnable{
     } catch (Exception e){}
 
     return s;
+  }
+
+  public void reset(){
+
+  }
+
+  private void getPath(){
+    Node temp = endNode;
+    while(temp != null){
+      temp.nodeColor(pathColor);
+      temp = temp.parent;
+    }
+    t = null;
+    return;
   }
 
 }

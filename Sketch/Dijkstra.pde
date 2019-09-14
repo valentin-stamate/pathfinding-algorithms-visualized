@@ -7,18 +7,27 @@ class Dijkstra extends Pathfiding{
 
   Dijkstra(List<List<Node>> arr){
     super(arr);
-    priorityQueue = new PriorityQueue<Node>(1, new CostComparator());
+    priorityQueue = new PriorityQueue<Node>(1, new DistanceComparator());
   }
 
   // HERE IS THE DIJKSTRA ALGORITHM
   @Override
   public void run(){
+    priorityQueue.clear();
+
     startNode.minDistance = 0;
     priorityQueue.add(startNode);
 
     Node temp;
 
     while(priorityQueue.size() != 0){
+
+      try{
+        while(searchDone){
+          Thread.sleep(20);
+        }
+      }
+      catch(Exception e){}
 
       try{ Thread.sleep(20); }
       catch(Exception e){}
@@ -34,12 +43,13 @@ class Dijkstra extends Pathfiding{
           temp = temp.parent;
         }
         println("Found");
+        super.t = null;
         return;
       }
 
       List<Node> neighbors = super.getSuccessors(temp);
       for(Node n : neighbors){
-        n.nodeColor( openListColor );
+        n.nodeColor(openListColor);
         float cost;
         if(n.i == temp.i || n.j == temp.j){
           cost = 1;
@@ -57,6 +67,7 @@ class Dijkstra extends Pathfiding{
       }
 
     }
+    super.t = null;
     println("Not Found");
   }
 
@@ -72,7 +83,7 @@ class Dijkstra extends Pathfiding{
 }
 
 // COMPARATOR CLASS FOR PriorityQueue
-class CostComparator implements Comparator<Node>{
+class DistanceComparator implements Comparator<Node>{
   @Override
   public int compare(Node a, Node b){
     return a.minDistance == b.minDistance ? 0 : a.minDistance < b.minDistance ? -1 : 1;

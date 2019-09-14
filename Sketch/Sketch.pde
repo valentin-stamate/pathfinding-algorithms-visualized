@@ -6,13 +6,14 @@ int scale, rows, cols;
 
 List<List<Node>> array;
 Node startNode, endNode;
-boolean MousePress, searchDone, searchStarted;
-boolean startNodeMove, endNodeMode, intro, undoWall, explicitMode;
+boolean MousePress, searchDone;
+boolean startNodeMove, endNodeMove, undoWall, explicitMode;
 
-ControlP5 startButton, pauseButton, resetButton, aStarButton, dikstraButton;
+ControlP5 pauseButton, resetButton, aStarButton, dikstraButton;
 color startColor, endColor, openListColor, closedListColor, pathColor, bgColor;
 
 Dijkstra dijkstra;
+AStar aStar;
 
 // SETUP()
 void setup(){
@@ -30,15 +31,12 @@ void draw(){
   startNode.nodeColor(startColor);
   endNode.nodeColor(endColor);
 }
-
-
-
 // INITIALIZE ALL
 void initialize(){
   scale = 20;
 
   MousePress = false;
-  searchDone = false;
+  searchDone = true;
 
   rows = (height - 40) / scale;
   cols = width / scale;
@@ -51,10 +49,10 @@ void initialize(){
     }
   }
   dijkstra = new Dijkstra(array);
+  aStar = new AStar(array);
 
   startNodeMove = false;
-  endNodeMode = false;
-  intro = true;
+  endNodeMove = false;
 
   startNode = array.get(rows / 2).get(5);
   endNode = array.get(rows / 2).get(cols - 1 - 5);
@@ -66,19 +64,19 @@ void initialize(){
   pathColor = color(0, 121, 107);
   bgColor = color(255);
 
-  startButton = new ControlP5(this);
-  startButton.addButton("Start")
-    .setPosition(10, height - 30)
-    .setSize(60, 20)
-  ;
   pauseButton = new ControlP5(this);
   pauseButton.addButton("Pause")
-    .setPosition(80, height - 30)
+    .setPosition(10, height - 30)
     .setSize(60, 20)
   ;
   resetButton = new ControlP5(this);
   resetButton.addButton("Reset")
-    .setPosition(150, height - 30)
+    .setPosition(80, height - 30)
+    .setSize(60, 20)
+  ;
+  dikstraButton = new ControlP5(this);
+  resetButton.addButton("dijkstra")
+    .setPosition(170, height - 30)
     .setSize(60, 20)
   ;
   aStarButton = new ControlP5(this);
@@ -86,27 +84,20 @@ void initialize(){
     .setPosition(240, height - 30)
     .setSize(60, 20)
   ;
-  resetButton = new ControlP5(this);
-  resetButton.addButton("dijkstra")
-    .setPosition(310, height - 30)
-    .setSize(60, 20)
-  ;
 
   explicitMode = true;// the first time the algorithm is running step by step
 }
-
-
 // DRAW THE BOTTOM BAR
 void drawDownNav(){
   noStroke();
-  fill( color(15) );
+  fill(color(15));
   rect(0, height - 40, width, 40 );
 }
 
 
 // MOUSE METHODS
 void mousePressed(){
-  if(intro || searchDone){
+  if(searchDone){
     if(mouseButton == LEFT)
       MousePress = true;
     else if(mouseButton == RIGHT)
@@ -117,31 +108,26 @@ void mouseReleased(){
   MousePress = false;
   undoWall = false;
   startNodeMove = false;
-  endNodeMode = false;
+  endNodeMove = false;
 }
 
 
 // BUTTONS
-void Start(){
-  searchStarted = true;
-  intro = false;
-}
 void Pause(){
-  searchStarted = false;
+  searchDone = !searchDone;
 }
 void Reset(){
   explicitMode = true;
-  searchStarted = false;
-  searchDone = false;
-  intro = true;
-
   MousePress = false;
   searchDone = false;
-
-}
-void astar(){
-
 }
 void dijkstra(){
-  dijkstra.start();
+  searchDone = false;
+  if(dijkstra.canStart()){
+    dijkstra.reset();
+    dijkstra.start();
+  }
+}
+void astar(){
+  aStar.start();
 }

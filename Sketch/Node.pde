@@ -4,6 +4,7 @@ public class Node{
   public boolean isBlocked;
 
   public float minDistance = Float.MAX_VALUE;
+  public float fScore = Float.MAX_VALUE, gScore = Float.MAX_VALUE, hScore;
   public boolean vizited = false;
   public Node parent = null;
 
@@ -22,15 +23,13 @@ public class Node{
       radius--;
     }
 
-
     if( isOverNode() ){
-      if(MousePress && !isBlocked && (intro || searchDone)){
-        if(endNodeMode){
+      if(MousePress && !isBlocked && searchDone){
+        if(endNodeMove){
           if(endNode != this && this != startNode){
             endNode.nodeColor(bgColor);
             endNode = this;
           }
-
         } else if(startNodeMove){
           if(startNode != this && this != endNode){
             startNode.nodeColor(bgColor);
@@ -46,7 +45,7 @@ public class Node{
         // ELSE WE KNOW THAT THE SELECTED NODE IS START OR END NODE
         // AND WE MOVE IT
         else if(this == endNode) {
-          endNodeMode = true;
+          endNodeMove = true;
         } else if(this == startNode){
           startNodeMove = true;
         }
@@ -56,7 +55,7 @@ public class Node{
       }
     }
 
-    // DRAWING A CELL
+    // DRAWING A NODE
     noStroke();
     fill(nodeColor);
     rect(j * scale + 2, i * scale + 2, scale - 2, scale - 2, radius);
@@ -69,6 +68,9 @@ public class Node{
 
   public void resetNode(){
     nodeColor = color(bgColor);
+    minDistance = Float.MAX_VALUE;
+    vizited = false;
+    parent = null;
     isBlocked = false;
   }
 
