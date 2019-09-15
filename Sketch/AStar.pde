@@ -2,32 +2,37 @@ import java.util.Comparator;
 import java.util.PriorityQueue;
 
 class AStar extends Pathfiding{
-  private PriorityQueue<Node> priorityQueue;
-
 
   AStar(List<List<Node>> arr){
     super(arr);
-    priorityQueue = new PriorityQueue<Node>(1, new DistanceFComparator());
+    super.priorityQueue = new PriorityQueue<Node>(1, new DistanceFComparator());
   }
 
   // HERE IS THE A* ALGORITHM
   @Override
   public void run(){
-    priorityQueue.clear();
+    super.reset();
+    searchStarted = true;
 
     startNode.gScore = 0;
-    priorityQueue.add(startNode);
+    super.priorityQueue.add(startNode);
 
     Node temp;
-    while(priorityQueue.size() != 0){
-      temp = priorityQueue.poll();
+
+    while(super.priorityQueue.size() != 0){
+      temp = super.priorityQueue.poll();
+
+      // PAUSE
+      try{while(searchPaused){ Thread.sleep(100); }}
+      catch(Exception e){}
 
       try{ Thread.sleep(5); }
       catch(Exception e){}
 
       if(temp == endNode){
-        super.getPath();
+        searchStarted = false;
         println("Found");
+        super.getPath();
         return;
       }
 
@@ -35,6 +40,7 @@ class AStar extends Pathfiding{
       List<Node> neighbors = super.getSuccessors(temp);
 
       for(Node n : neighbors){
+        n.nodeColor(openListColor);
         float cost;
         if(n.i == temp.i || n.j == temp.j){
           cost = 1;
@@ -51,14 +57,14 @@ class AStar extends Pathfiding{
         }
 
         if(!n.vizited)
-          priorityQueue.add(n);
+          super.priorityQueue.add(n);
         n.vizited = true;
 
       }
-
     }
-
-    print("Not found");
+    searchStarted = false;
+    super.t = null;
+    println("Not Found");
 
   }
 

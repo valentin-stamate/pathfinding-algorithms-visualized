@@ -1,5 +1,6 @@
 class Pathfiding implements Runnable{
   private List<List<Node>> matrix;
+  private PriorityQueue<Node> priorityQueue;
   private Thread t;
 
   Pathfiding(List<List<Node>> arr){
@@ -13,7 +14,7 @@ class Pathfiding implements Runnable{
   }
 
   public boolean canStart(){
-    return t == null ? true : false;
+    return t == null && !searchStarted ? true : false;
   }
 
   // GET ALL POSSIBLE SUCCESSORS
@@ -73,16 +74,21 @@ class Pathfiding implements Runnable{
   }
 
   public void reset(){
-
+    for(int i = 0; i < rows; i++){
+      for(Node n : matrix.get(i)){
+        n.resetNodeValues();
+      }
+    }
+    priorityQueue.clear();
   }
 
   private void getPath(){
+    this.t = null;
     Node temp = endNode;
     while(temp != null){
       temp.nodeColor(pathColor);
       temp = temp.parent;
     }
-    t = null;
     return;
   }
 

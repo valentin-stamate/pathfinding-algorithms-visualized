@@ -24,7 +24,7 @@ public class Node{
     }
 
     if( isOverNode() ){
-      if(MousePress && !isBlocked && searchDone){
+      if(MousePress && !isBlocked && !searchStarted){
         if(endNodeMove){
           if(endNode != this && this != startNode){
             endNode.nodeColor(bgColor);
@@ -67,11 +67,17 @@ public class Node{
   }
 
   public void resetNode(){
+    resetNodeValues();
     nodeColor = color(bgColor);
+    isBlocked = false;
+  }
+  public void resetNodeValues(){
+    if(!isBlocked){
+      nodeColor = color(bgColor);
+    }
     minDistance = Float.MAX_VALUE;
     vizited = false;
     parent = null;
-    isBlocked = false;
   }
 
   // IF THE MOUSE IS CLICKED AND OVER THE CELL RETURN TRUE

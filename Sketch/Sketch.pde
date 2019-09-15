@@ -6,10 +6,10 @@ int scale, rows, cols;
 
 List<List<Node>> array;
 Node startNode, endNode;
-boolean MousePress, searchDone;
-boolean startNodeMove, endNodeMove, undoWall, explicitMode;
+boolean MousePress, searchStarted;
+boolean startNodeMove, endNodeMove, undoWall, explicitMode, searchPaused, directSearch;
 
-ControlP5 pauseButton, resetButton, aStarButton, dikstraButton;
+ControlP5 button;
 color startColor, endColor, openListColor, closedListColor, pathColor, bgColor;
 
 Dijkstra dijkstra;
@@ -36,7 +36,8 @@ void initialize(){
   scale = 20;
 
   MousePress = false;
-  searchDone = true;
+  searchStarted = false;
+  searchPaused = false;
 
   rows = (height - 40) / scale;
   cols = width / scale;
@@ -53,6 +54,7 @@ void initialize(){
 
   startNodeMove = false;
   endNodeMove = false;
+  directSearch = false;
 
   startNode = array.get(rows / 2).get(5);
   endNode = array.get(rows / 2).get(cols - 1 - 5);
@@ -64,23 +66,21 @@ void initialize(){
   pathColor = color(0, 121, 107);
   bgColor = color(255);
 
-  pauseButton = new ControlP5(this);
-  pauseButton.addButton("Pause")
+  button = new ControlP5(this);
+  button.addButton("Pause")
     .setPosition(10, height - 30)
     .setSize(60, 20)
   ;
-  resetButton = new ControlP5(this);
-  resetButton.addButton("Reset")
+
+  button.addButton("Reset")
     .setPosition(80, height - 30)
     .setSize(60, 20)
   ;
-  dikstraButton = new ControlP5(this);
-  resetButton.addButton("dijkstra")
+  button.addButton("dijkstra")
     .setPosition(170, height - 30)
     .setSize(60, 20)
   ;
-  aStarButton = new ControlP5(this);
-  aStarButton.addButton("astar")
+  button.addButton("astar")
     .setPosition(240, height - 30)
     .setSize(60, 20)
   ;
@@ -97,7 +97,7 @@ void drawDownNav(){
 
 // MOUSE METHODS
 void mousePressed(){
-  if(searchDone){
+  if(!searchStarted){
     if(mouseButton == LEFT)
       MousePress = true;
     else if(mouseButton == RIGHT)
@@ -114,20 +114,28 @@ void mouseReleased(){
 
 // BUTTONS
 void Pause(){
-  searchDone = !searchDone;
+  searchPaused = !searchPaused;
 }
 void Reset(){
   explicitMode = true;
   MousePress = false;
-  searchDone = false;
+  searchPaused = false;
+  searchStarted = false;
+
+  dijkstra.reset();
+  // TODO how to stop a thread
 }
 void dijkstra(){
-  searchDone = false;
+  searchPaused = false;
   if(dijkstra.canStart()){
-    dijkstra.reset();
+    println("DJIGSTRA");
     dijkstra.start();
   }
 }
 void astar(){
-  aStar.start();
+  searchPaused = false;
+  if(aStar.canStart()){
+    println("ASTAR");
+    aStar.start();
+  }
 }
