@@ -11,8 +11,6 @@ class Dijkstra extends Pathfiding{
   // HERE IS THE DIJKSTRA ALGORITHM
   @Override
   public void run(){
-    super.reset();
-    searchStarted = true;
 
     startNode.minDistance = 0;
     super.priorityQueue.add(startNode);
@@ -22,11 +20,13 @@ class Dijkstra extends Pathfiding{
     while(super.priorityQueue.size() != 0){
 
       // PAUSE
-      try{while(searchPaused){ Thread.sleep(100); }}
-      catch(Exception e){}
+      if(explicitMode){
+        try{while(searchPaused){ Thread.sleep(100); }}
+        catch(Exception e){}
 
-      try{ Thread.sleep(10); }
-      catch(Exception e){}
+        try{ Thread.sleep(5); }
+        catch(Exception e){}
+      }
 
       temp = super.priorityQueue.poll();
       temp.nodeColor( closedListColor );
@@ -58,7 +58,7 @@ class Dijkstra extends Pathfiding{
           super.priorityQueue.add(n);
         n.vizited = true;
       }
-
+      print("");
     }
     searchStarted = false;
     println("Not Found");
@@ -66,8 +66,13 @@ class Dijkstra extends Pathfiding{
   }
 
   public void start(){
-    super.t = new Thread(this);
-    super.t.start();
+    super.reset();
+    searchStarted = true;
+    if(super.t == null){
+      super.t = new Thread(this);
+    }
+    try{ super.t.start(); }
+    catch(Exception e){}
   }
 
   private float heuristic(Node a, Node b){

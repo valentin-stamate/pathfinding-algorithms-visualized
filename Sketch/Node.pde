@@ -29,6 +29,14 @@ public class Node{
           if(endNode != this && this != startNode){
             endNode.nodeColor(bgColor);
             endNode = this;
+
+            if(!drawMode){
+              explicitMode = false;
+              switch(PathfidingAlgorithm){
+                case 1: dijkstra.start(); break;
+                case 2: aStar.start(); break;
+              }
+            }
           }
         } else if(startNodeMove){
           if(startNode != this && this != endNode){
@@ -76,6 +84,9 @@ public class Node{
       nodeColor = color(bgColor);
     }
     minDistance = Float.MAX_VALUE;
+    fScore = Float.MAX_VALUE;
+    gScore = Float.MAX_VALUE;
+    hScore = 0;
     vizited = false;
     parent = null;
   }

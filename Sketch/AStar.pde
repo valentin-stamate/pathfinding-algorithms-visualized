@@ -11,8 +11,6 @@ class AStar extends Pathfiding{
   // HERE IS THE A* ALGORITHM
   @Override
   public void run(){
-    super.reset();
-    searchStarted = true;
 
     startNode.gScore = 0;
     super.priorityQueue.add(startNode);
@@ -22,12 +20,13 @@ class AStar extends Pathfiding{
     while(super.priorityQueue.size() != 0){
       temp = super.priorityQueue.poll();
 
-      // PAUSE
-      try{while(searchPaused){ Thread.sleep(100); }}
-      catch(Exception e){}
+      if(explicitMode){
+        try{while(searchPaused){ Thread.sleep(100); }}
+        catch(Exception e){}
 
-      try{ Thread.sleep(5); }
-      catch(Exception e){}
+        try{ Thread.sleep(5); }
+        catch(Exception e){}
+      }
 
       if(temp == endNode){
         searchStarted = false;
@@ -61,16 +60,24 @@ class AStar extends Pathfiding{
         n.vizited = true;
 
       }
+
+      print("");
+
     }
     searchStarted = false;
-    super.t = null;
     println("Not Found");
 
   }
 
   public void start(){
-    super.t = new Thread(this);
-    super.t.start();
+    super.reset();
+    searchStarted = true;
+
+    if(super.t == null){
+      super.t = new Thread(this);
+    }
+    try{ super.t.start(); }
+    catch(Exception e){}
   }
 
   float heuristic(Node a, Node b){

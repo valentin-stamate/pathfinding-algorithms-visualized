@@ -7,7 +7,8 @@ int scale, rows, cols;
 List<List<Node>> array;
 Node startNode, endNode;
 boolean MousePress, searchStarted;
-boolean startNodeMove, endNodeMove, undoWall, explicitMode, searchPaused, directSearch;
+boolean startNodeMove, endNodeMove, undoWall, explicitMode, searchPaused, drawMode;
+int PathfidingAlgorithm;
 
 ControlP5 button;
 color startColor, endColor, openListColor, closedListColor, pathColor, bgColor;
@@ -38,6 +39,10 @@ void initialize(){
   MousePress = false;
   searchStarted = false;
   searchPaused = false;
+  startNodeMove = false;
+  endNodeMove = false;
+  explicitMode = true;
+  drawMode = true;
 
   rows = (height - 40) / scale;
   cols = width / scale;
@@ -51,10 +56,6 @@ void initialize(){
   }
   dijkstra = new Dijkstra(array);
   aStar = new AStar(array);
-
-  startNodeMove = false;
-  endNodeMove = false;
-  directSearch = false;
 
   startNode = array.get(rows / 2).get(5);
   endNode = array.get(rows / 2).get(cols - 1 - 5);
@@ -122,20 +123,39 @@ void Reset(){
   searchPaused = false;
   searchStarted = false;
 
-  dijkstra.reset();
-  // TODO how to stop a thread
+  // THIS FOR FINISH UP THE THREAD
+  explicitMode = false;
+  try{ Thread.sleep(50); }
+  catch(Exception e){}
+  // ONLY ONE IS NECESSARY
+  for(int i = 0; i < rows; i++){
+    for(Node n : array.get(i)){
+      if(n == endNode || n == startNode)
+        n.resetNodeValues();
+      n.resetNode();
+    }
+  }
+  explicitMode = true;
+
+  drawMode = true;
 }
 void dijkstra(){
+  PathfidingAlgorithm = 1;
   searchPaused = false;
+  explicitMode = true;
   if(dijkstra.canStart()){
     println("DJIGSTRA");
+    drawMode = false;
     dijkstra.start();
   }
 }
 void astar(){
+  PathfidingAlgorithm = 2;
   searchPaused = false;
+  explicitMode = true;
   if(aStar.canStart()){
     println("ASTAR");
+    drawMode = false;
     aStar.start();
   }
 }

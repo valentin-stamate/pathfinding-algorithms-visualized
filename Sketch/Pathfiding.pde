@@ -79,7 +79,7 @@ class Pathfiding implements Runnable{
         n.resetNodeValues();
       }
     }
-    priorityQueue.clear();
+    this.priorityQueue.clear();
   }
 
   private void getPath(){
