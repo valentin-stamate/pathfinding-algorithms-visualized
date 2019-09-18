@@ -1,6 +1,6 @@
 # Pathfinding Algorithms Visualized
 
-<img width="600" src="https://i.postimg.cc/T3Mrkg6N/Capture.png">
+<img width="600" src="https://i.postimg.cc/bw5h98Wq/Capture.png">
 
 ## About  
 
@@ -12,6 +12,7 @@ Features :
 * live searching
 * draw/remove walls after the search ends
 * move end point and see instantly the path
+* a nice animation
 
 Pathfinding algorithms used :
 

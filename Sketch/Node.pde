@@ -1,5 +1,5 @@
 public class Node{
-  public int i, j, radius;
+  public int i, j;
   private color nodeColor;
   public boolean isBlocked;
 
@@ -7,6 +7,9 @@ public class Node{
   public float fScore = Float.MAX_VALUE, gScore = Float.MAX_VALUE, hScore;
   public boolean vizited = false;
   public Node parent = null;
+
+  // ANIMATION
+  public int nodeSize = scale - 2, radius = 9;
 
   // NDOE CONSTRUCTOR
   Node(int i, int j){
@@ -19,8 +22,12 @@ public class Node{
 
   // DRAW FUNCTION WHICH IS CALLED AUTOMATICALLY
   void draw(){
-    if(radius > 0){
+    if(radius > 0 && nodeSize == scale - 2){
       radius--;
+    }
+
+    if(this.nodeSize < scale - 2){
+      this.nodeSize++;
     }
 
     if( isOverNode() ){
@@ -52,9 +59,10 @@ public class Node{
         // IF THE SELECTED CELL IS NOT START OR END NODE THEN
         // MAKE IT BLOCKED
         else if (this != startNode && this != endNode){
-          this.resetNode();
+          resetNode();
           nodeColor = color(25);
           isBlocked = true;
+          animate();
         }
         // ELSE WE KNOW THAT THE SELECTED NODE IS START OR END NODE
         // AND WE MOVE IT
@@ -72,12 +80,15 @@ public class Node{
     // DRAWING A NODE
     noStroke();
     fill(nodeColor);
-    rect(j * scale + 2, i * scale + 2, scale - 2, scale - 2, radius);
+    rect(j * scale + scale / 2, i * scale + scale / 2, this.nodeSize, this.nodeSize, this.radius);
   }
 
   // CHANGE THE CELL COLOR WHEN NEEDED
   public void nodeColor(color col){
     nodeColor = col;
+    if(explicitMode && this != startNode && this != endNode){
+      animate();
+    }
   }
 
   public void resetNode(){
@@ -95,6 +106,11 @@ public class Node{
     hScore = 0;
     vizited = false;
     parent = null;
+  }
+
+  private void animate(){
+    nodeSize = 2;
+    radius = 9;
   }
 
   // IF THE MOUSE IS CLICKED AND OVER THE CELL RETURN TRUE

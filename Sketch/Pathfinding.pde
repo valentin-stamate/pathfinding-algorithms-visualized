@@ -1,7 +1,8 @@
-class Pathfinding implements Runnable{
+public class Pathfinding implements Runnable{
   private List<List<Node>> matrix;
   private PriorityQueue<Node> priorityQueue;
   private Thread t;
+  public static final int DELAY = 10;
 
   Pathfinding(List<List<Node>> arr){
     this.matrix = arr;
@@ -86,6 +87,8 @@ class Pathfinding implements Runnable{
     this.t = null;
     Node temp = endNode;
     while(temp != null && temp != startNode){
+        try{if(explicitMode){ Thread.sleep(20); }}
+        catch(Exception e){}
         temp.nodeColor(pathColor);
         temp = temp.parent;
     }

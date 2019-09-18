@@ -22,6 +22,7 @@ void setup(){
   frameRate(60);
   background(255);
 
+  rectMode(CENTER);
   initialize();
 }
 // DRAW()
@@ -92,7 +93,7 @@ void initialize(){
 void drawDownNav(){
   noStroke();
   fill(color(15));
-  rect(0, height - 40, width, 40 );
+  rect(width / 2, height - 20, width, 40 );
 }
 
 

@@ -24,7 +24,7 @@ class Dijkstra extends Pathfinding{
         try{while(searchPaused){ Thread.sleep(100); }}
         catch(Exception e){}
 
-        try{ Thread.sleep(5); }
+        try{ Thread.sleep(Pathfinding.DELAY); }
         catch(Exception e){}
       }
 
@@ -35,7 +35,7 @@ class Dijkstra extends Pathfinding{
 
       if(temp == endNode){
         searchStarted = false;
-        println("Found");
+        // println("Found");
         super.getPath();
         return;
       }
