@@ -85,9 +85,9 @@ class Pathfiding implements Runnable{
   private void getPath(){
     this.t = null;
     Node temp = endNode;
-    while(temp != null){
-      temp.nodeColor(pathColor);
-      temp = temp.parent;
+    while(temp != null && temp != startNode){
+        temp.nodeColor(pathColor);
+        temp = temp.parent;
     }
     return;
   }

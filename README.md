@@ -1,22 +1,27 @@
 # Pathfiding Algorithms Visualized
 
-<img width="400" src="https://i.postimg.cc/RFG3VL3W/Capture33.png">
+<img width="600" src="https://i.postimg.cc/T3Mrkg6N/Capture.png">
 
 ## About  
 
 Here you can see in realtime how pathfiding algorithms works. You can also draw walls and move the start and end point.
 
-This include :
+Features : 
+
+* draw (left click) & remove (right click) walls
+* live searching
+* draw/remove walls after the search ends
+* move end point and see instantly the path
+
+Pathfiding algorithms used :
 
 * `A*`
-* `Dijkstra` (modified version because here is not a cost graph)
-
-Soon :
-* `Prim`
+* `Dijkstra`
 
 ## How To Run
 
-In order to run this, you'll need to install [Processing](https://processing.org/) first. Open Sketch.pde under Sketch folder and you are done.
+In order to run this, you'll need to install [Processing](https://processing.org/) first. Open Sketch.pde under Sketch folder and you are done.  
+Also you must have the GUI library installed : [ControlP5](http://www.sojamo.de/libraries/controlP5/)
 
 ## Credits
 

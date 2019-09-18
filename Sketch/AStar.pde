@@ -7,11 +7,11 @@ class AStar extends Pathfiding{
     super(arr);
     super.priorityQueue = new PriorityQueue<Node>(1, new DistanceFComparator());
   }
-
+  int k = 0;
   // HERE IS THE A* ALGORITHM
   @Override
   public void run(){
-
+    super.priorityQueue.clear();
     startNode.gScore = 0;
     super.priorityQueue.add(startNode);
 

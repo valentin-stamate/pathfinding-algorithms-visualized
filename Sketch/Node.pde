@@ -47,6 +47,7 @@ public class Node{
         // IF THE SELECTED CELL IS NOT START OR END NODE THEN
         // MAKE IT BLOCKED
         else if (this != startNode && this != endNode){
+          this.resetNode();
           nodeColor = color(25);
           isBlocked = true;
         }
