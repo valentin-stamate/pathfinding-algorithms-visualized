@@ -8,7 +8,7 @@ List<List<Node>> array;
 Node startNode, endNode;
 boolean MousePress, searchStarted;
 boolean startNodeMove, endNodeMove, undoWall, explicitMode, searchPaused, drawMode;
-int PathfidingAlgorithm;
+int PathfindingAlgorithm;
 
 ControlP5 button;
 color startColor, endColor, openListColor, closedListColor, pathColor, bgColor;
@@ -140,7 +140,7 @@ void Reset(){
   drawMode = true;
 }
 void dijkstra(){
-  PathfidingAlgorithm = 1;
+  PathfindingAlgorithm = 1;
   searchPaused = false;
   explicitMode = true;
   if(dijkstra.canStart()){
@@ -150,7 +150,7 @@ void dijkstra(){
   }
 }
 void astar(){
-  PathfidingAlgorithm = 2;
+  PathfindingAlgorithm = 2;
   searchPaused = false;
   explicitMode = true;
   if(aStar.canStart()){

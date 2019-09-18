@@ -1,7 +1,7 @@
 import java.util.Comparator;
 import java.util.PriorityQueue;
 
-class Dijkstra extends Pathfiding{
+class Dijkstra extends Pathfinding{
 
   Dijkstra(List<List<Node>> arr){
     super(arr);

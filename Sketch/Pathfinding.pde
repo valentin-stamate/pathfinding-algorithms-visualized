@@ -1,13 +1,13 @@
-class Pathfiding implements Runnable{
+class Pathfinding implements Runnable{
   private List<List<Node>> matrix;
   private PriorityQueue<Node> priorityQueue;
   private Thread t;
 
-  Pathfiding(List<List<Node>> arr){
+  Pathfinding(List<List<Node>> arr){
     this.matrix = arr;
   }
 
-  // HERE WILL BE THE PATHFIDING ALGORITHM
+  // HERE WILL BE THE PATHFINDING ALGORITHM
   @Override
   public void run(){
     // look into the subclass

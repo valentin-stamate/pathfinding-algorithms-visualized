@@ -32,11 +32,16 @@ public class Node{
 
             if(!drawMode){
               explicitMode = false;
-              switch(PathfidingAlgorithm){
+              switch(PathfindingAlgorithm){
                 case 1: dijkstra.start(); break;
                 case 2: aStar.start(); break;
+
               }
+              // FOR REMOVING `CELL FLASH`
+              try{ Thread.sleep(15); }
+              catch(Exception e){}
             }
+
           }
         } else if(startNodeMove){
           if(startNode != this && this != endNode){

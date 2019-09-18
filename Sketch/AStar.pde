@@ -1,7 +1,7 @@
 import java.util.Comparator;
 import java.util.PriorityQueue;
 
-class AStar extends Pathfiding{
+class AStar extends Pathfinding{
 
   AStar(List<List<Node>> arr){
     super(arr);

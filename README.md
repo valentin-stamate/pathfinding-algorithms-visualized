@@ -1,19 +1,19 @@
-# Pathfiding Algorithms Visualized
+# Pathfinding Algorithms Visualized
 
 <img width="600" src="https://i.postimg.cc/T3Mrkg6N/Capture.png">
 
 ## About  
 
-Here you can see in realtime how pathfiding algorithms works. You can also draw walls and move the start and end point.
+Here you can see in realtime how pathfinding algorithms works. You can also draw walls and move the start and end point.
 
-Features : 
+Features :  
 
 * draw (left click) & remove (right click) walls
 * live searching
 * draw/remove walls after the search ends
 * move end point and see instantly the path
 
-Pathfiding algorithms used :
+Pathfinding algorithms used :
 
 * `A*`
 * `Dijkstra`
