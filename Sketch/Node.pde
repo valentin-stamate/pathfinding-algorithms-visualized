@@ -1,18 +1,18 @@
-public class Node{
-  public int i, j;
+public class Node {
+  private int i, j;
   private color nodeColor;
-  public boolean isBlocked;
+  private boolean isBlocked;
 
-  public float minDistance = Float.MAX_VALUE;
-  public float fScore = Float.MAX_VALUE, gScore = Float.MAX_VALUE, hScore;
-  public boolean vizited = false;
-  public Node parent = null;
+  private float minDistance = Float.MAX_VALUE;
+  private float fScore = Float.MAX_VALUE, gScore = Float.MAX_VALUE, hScore;
+  private boolean vizited = false;
+  private Node parent = null;
 
   // ANIMATION
-  public int nodeSize = scale - 2, radius = 9;
+  private int nodeSize = scale - 2, radius = 9;
 
   // NDOE CONSTRUCTOR
-  Node(int i, int j){
+  Node(int i, int j) {
     this.i = i;
     this.j = j;
     isBlocked = false;
@@ -21,23 +21,23 @@ public class Node{
   }
 
   // DRAW FUNCTION WHICH IS CALLED AUTOMATICALLY
-  void draw(){
-    if(radius > 0 && nodeSize == scale - 2){
+  void draw() {
+    if(radius > 0 && nodeSize == scale - 2) {
       radius--;
     }
 
-    if(this.nodeSize < scale - 2){
+    if(this.nodeSize < scale - 2) {
       this.nodeSize++;
     }
 
     if( isOverNode() ){
-      if(MousePress && !isBlocked && !searchStarted){
-        if(endNodeMove){
-          if(endNode != this && this != startNode){
+      if(MousePress && !isBlocked && !searchStarted) {
+        if(endNodeMove) {
+          if(endNode != this && this != startNode) {
             endNode.nodeColor(bgColor);
             endNode = this;
 
-            if(!drawMode){
+            if(!drawMode) {
               explicitMode = false;
               switch(PathfindingAlgorithm){
                 case 1: dijkstra.start(); break;
@@ -50,15 +50,15 @@ public class Node{
             }
 
           }
-        } else if(startNodeMove){
-          if(startNode != this && this != endNode){
+        } else if(startNodeMove) {
+          if(startNode != this && this != endNode) {
             startNode.nodeColor(bgColor);
             startNode = this;
           }
         }
         // IF THE SELECTED CELL IS NOT START OR END NODE THEN
         // MAKE IT BLOCKED
-        else if (this != startNode && this != endNode){
+        else if (this != startNode && this != endNode) {
           resetNode();
           nodeColor = color(25);
           isBlocked = true;
@@ -68,11 +68,11 @@ public class Node{
         // AND WE MOVE IT
         else if(this == endNode) {
           endNodeMove = true;
-        } else if(this == startNode){
+        } else if(this == startNode) {
           startNodeMove = true;
         }
       }
-      else if(undoWall && isBlocked){
+      else if(undoWall && isBlocked) {
         resetNode();
       }
     }
@@ -84,22 +84,24 @@ public class Node{
   }
 
   // CHANGE THE CELL COLOR WHEN NEEDED
-  public void nodeColor(color col){
+  public void nodeColor(color col) {
     nodeColor = col;
     if(explicitMode && this != startNode && this != endNode){
       animate();
     }
   }
 
-  public void resetNode(){
+  public void resetNode() {
     resetNodeValues();
     nodeColor = color(bgColor);
     isBlocked = false;
   }
-  public void resetNodeValues(){
+
+  public void resetNodeValues() {
     if(!isBlocked){
       nodeColor = color(bgColor);
     }
+
     minDistance = Float.MAX_VALUE;
     fScore = Float.MAX_VALUE;
     gScore = Float.MAX_VALUE;
@@ -108,7 +110,7 @@ public class Node{
     parent = null;
   }
 
-  private void animate(){
+  private void animate() {
     nodeSize = 2;
     radius = 9;
   }

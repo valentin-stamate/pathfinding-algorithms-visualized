@@ -1,77 +1,77 @@
 public class Pathfinding implements Runnable{
   private List<List<Node>> matrix;
   private PriorityQueue<Node> priorityQueue;
-  private Thread t;
+  private Thread thread;
   public static final int DELAY = 10;
 
-  Pathfinding(List<List<Node>> arr){
+  Pathfinding(List<List<Node>> arr) {
     this.matrix = arr;
   }
 
   // HERE WILL BE THE PATHFINDING ALGORITHM
   @Override
-  public void run(){
+  public void run() {
     // look into the subclass
   }
 
   public boolean canStart(){
-    return t == null && !searchStarted ? true : false;
+    return thread == null && !searchStarted ? true : false;
   }
 
   // GET ALL POSSIBLE SUCCESSORS
-  private List<Node> getSuccessors(Node node){
-    List<Node> s = new ArrayList<Node>();
+  private List<Node> getSuccessors(Node node) {
+    List<Node> successors = new ArrayList<Node>();
     Node n;
     try {
       n = array.get( node.i - 1 ).get( node.j - 1 );
       if(!n.vizited && !n.isBlocked){
-        s.add(n);
+        successors.add(n);
       }
     } catch (Exception e){}
     try {
       n = array.get( node.i - 1 ).get( node.j );
       if(!n.vizited && !n.isBlocked){
-        s.add(n);
+        successors.add(n);
       }
     } catch (Exception e){}
     try {
       n = array.get( node.i - 1 ).get( node.j + 1 ) ;
       if(!n.vizited && !n.isBlocked){
-        s.add(n);
+        successors.add(n);
       }
     } catch (Exception e){}
     try {
       n = array.get( node.i ).get( node.j - 1 );
       if(!n.vizited && !n.isBlocked){
-        s.add(n);
+        successors.add(n);
       }
     } catch (Exception e){}
     try {
       n = array.get( node.i ).get( node.j + 1 ) ;
       if(!n.vizited && !n.isBlocked){
-        s.add(n);
+        successors.add(n);
       }
     } catch (Exception e){}
     try {
       n = array.get( node.i + 1 ).get( node.j - 1 ) ;
       if(!n.vizited && !n.isBlocked){
-        s.add(n);
+        successors.add(n);
       }
     } catch (Exception e){}
     try {
       n = array.get( node.i + 1 ).get( node.j );
       if(!n.vizited && !n.isBlocked){
-        s.add(n);
+        successors.add(n);
       }
     } catch (Exception e){}
     try {
       n = array.get( node.i + 1 ).get( node.j + 1 );
       if(!n.vizited && !n.isBlocked){
-        s.add(n);
+        successors.add(n);
       }
     } catch (Exception e){}
 
-    return s;
+    return successors;
   }
 
   public void reset(){
@@ -80,11 +80,12 @@ public class Pathfinding implements Runnable{
         n.resetNodeValues();
       }
     }
-    this.priorityQueue.clear();
+
+    priorityQueue.clear();
   }
 
   private void getPath(){
-    this.t = null;
+    thread = null;
     Node temp = endNode;
     while(temp != null && temp != startNode){
         try{if(explicitMode){ Thread.sleep(20); }}

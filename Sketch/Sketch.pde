@@ -25,6 +25,7 @@ void setup(){
   rectMode(CENTER);
   initialize();
 }
+
 // DRAW()
 void draw(){
   background(255);
@@ -33,6 +34,7 @@ void draw(){
   startNode.nodeColor(startColor);
   endNode.nodeColor(endColor);
 }
+
 // INITIALIZE ALL
 void initialize(){
   scale = 20;
@@ -50,11 +52,12 @@ void initialize(){
 
   array = new ArrayList<List<Node>>();
   for(int i = 0; i < rows; i ++){
-    array.add( new ArrayList<Node>()  );
+    array.add(new ArrayList<Node>());
     for(int j = 0; j < cols; j ++){
-      array.get( i ).add( new Node(i, j) );
+      array.get(i).add(new Node(i, j));
     }
   }
+
   dijkstra = new Dijkstra(array);
   aStar = new AStar(array);
 
@@ -89,13 +92,13 @@ void initialize(){
 
   explicitMode = true;// the first time the algorithm is running step by step
 }
+
 // DRAW THE BOTTOM BAR
 void drawDownNav(){
   noStroke();
   fill(color(15));
   rect(width / 2, height - 20, width, 40 );
 }
-
 
 // MOUSE METHODS
 void mousePressed(){
@@ -106,13 +109,13 @@ void mousePressed(){
       undoWall = true;
   }
 }
+
 void mouseReleased(){
   MousePress = false;
   undoWall = false;
   startNodeMove = false;
   endNodeMove = false;
 }
-
 
 // BUTTONS
 void Pause(){
@@ -128,6 +131,7 @@ void Reset(){
   explicitMode = false;
   try{ Thread.sleep(50); }
   catch(Exception e){}
+
   // ONLY ONE IS NECESSARY
   for(int i = 0; i < rows; i++){
     for(Node n : array.get(i)){
@@ -136,10 +140,12 @@ void Reset(){
       n.resetNode();
     }
   }
+
   explicitMode = true;
 
   drawMode = true;
 }
+
 void dijkstra(){
   PathfindingAlgorithm = 1;
   searchPaused = false;
@@ -150,6 +156,7 @@ void dijkstra(){
     dijkstra.start();
   }
 }
+
 void astar(){
   PathfindingAlgorithm = 2;
   searchPaused = false;

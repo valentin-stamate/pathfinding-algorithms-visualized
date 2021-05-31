@@ -1,16 +1,16 @@
 import java.util.Comparator;
 import java.util.PriorityQueue;
 
-class Dijkstra extends Pathfinding{
+class Dijkstra extends Pathfinding {
 
-  Dijkstra(List<List<Node>> arr){
+  Dijkstra(List<List<Node>> arr) {
     super(arr);
     super.priorityQueue = new PriorityQueue<Node>(1, new DistanceComparator());
   }
 
   // HERE IS THE DIJKSTRA ALGORITHM
   @Override
-  public void run(){
+  public void run() {
 
     startNode.minDistance = 0;
     super.priorityQueue.add(startNode);
@@ -20,7 +20,7 @@ class Dijkstra extends Pathfinding{
     while(super.priorityQueue.size() != 0){
 
       // PAUSE
-      if(explicitMode){
+      if(explicitMode) {
         try{while(searchPaused){ Thread.sleep(100); }}
         catch(Exception e){}
 
@@ -29,11 +29,11 @@ class Dijkstra extends Pathfinding{
       }
 
       temp = super.priorityQueue.poll();
-      temp.nodeColor( closedListColor );
+      temp.nodeColor(closedListColor);
 
       float tempDist = temp.minDistance;
 
-      if(temp == endNode){
+      if(temp == endNode) {
         searchStarted = false;
         // println("Found");
         super.getPath();
@@ -41,7 +41,7 @@ class Dijkstra extends Pathfinding{
       }
 
       List<Node> neighbors = super.getSuccessors(temp);
-      for(Node n : neighbors){
+      for(Node n : neighbors) {
         n.nodeColor(openListColor);
         float cost;
         if(n.i == temp.i || n.j == temp.j){
@@ -50,32 +50,38 @@ class Dijkstra extends Pathfinding{
           cost = 1.4;
         }
 
-        if(tempDist + cost < n.minDistance){
+        if(tempDist + cost < n.minDistance) {
           n.minDistance = tempDist + cost;
           n.parent = temp;
         }
-        if(!n.vizited)
+        if(!n.vizited) {
           super.priorityQueue.add(n);
+        }
+
         n.vizited = true;
       }
+
       print("");
     }
+
     searchStarted = false;
     println("Not Found");
-    super.t = null;
+    super.thread = null;
   }
 
-  public void start(){
+  public void start() {
     super.reset();
     searchStarted = true;
-    if(super.t == null){
-      super.t = new Thread(this);
+
+    if(super.thread == null) {
+      super.thread = new Thread(this);
     }
-    try{ super.t.start(); }
+
+    try{ super.thread.start(); }
     catch(Exception e){}
   }
 
-  private float heuristic(Node a, Node b){
+  private float heuristic(Node a, Node b) {
     return dist(a.j, a.i, b.j, b.i);
   }
 
