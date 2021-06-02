@@ -6,9 +6,9 @@ int scale, rows, cols;
 
 List<List<Node>> array;
 Node startNode, endNode;
-boolean MousePress, searchStarted;
+boolean mousePress, searchStarted;
 boolean startNodeMove, endNodeMove, undoWall, explicitMode, searchPaused, drawMode;
-int PathfindingAlgorithm;
+int pathfindingAlgorithm;
 
 ControlP5 button;
 color startColor, endColor, openListColor, closedListColor, pathColor, bgColor;
@@ -39,7 +39,7 @@ void draw(){
 void initialize(){
   scale = 20;
 
-  MousePress = false;
+  mousePress = false;
   searchStarted = false;
   searchPaused = false;
   startNodeMove = false;
@@ -104,14 +104,14 @@ void drawDownNav(){
 void mousePressed(){
   if(!searchStarted){
     if(mouseButton == LEFT)
-      MousePress = true;
+      mousePress = true;
     else if(mouseButton == RIGHT)
       undoWall = true;
   }
 }
 
 void mouseReleased(){
-  MousePress = false;
+  mousePress = false;
   undoWall = false;
   startNodeMove = false;
   endNodeMove = false;
@@ -123,7 +123,7 @@ void Pause(){
 }
 void Reset(){
   explicitMode = true;
-  MousePress = false;
+  mousePress = false;
   searchPaused = false;
   searchStarted = false;
 
@@ -147,7 +147,7 @@ void Reset(){
 }
 
 void dijkstra(){
-  PathfindingAlgorithm = 1;
+  pathfindingAlgorithm = 1;
   searchPaused = false;
   explicitMode = true;
   if(dijkstra.canStart()){
@@ -158,7 +158,7 @@ void dijkstra(){
 }
 
 void astar(){
-  PathfindingAlgorithm = 2;
+  pathfindingAlgorithm = 2;
   searchPaused = false;
   explicitMode = true;
   if(aStar.canStart()){

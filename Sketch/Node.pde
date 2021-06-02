@@ -31,7 +31,7 @@ public class Node {
     }
 
     if( isOverNode() ){
-      if(MousePress && !isBlocked && !searchStarted) {
+      if(mousePress && !isBlocked && !searchStarted) {
         if(endNodeMove) {
           if(endNode != this && this != startNode) {
             endNode.nodeColor(bgColor);
@@ -39,7 +39,7 @@ public class Node {
 
             if(!drawMode) {
               explicitMode = false;
-              switch(PathfindingAlgorithm){
+              switch(pathfindingAlgorithm){
                 case 1: dijkstra.start(); break;
                 case 2: aStar.start(); break;
 
